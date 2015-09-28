@@ -2,15 +2,18 @@
 $Interval = defined ($ENV{'COLLECTD_INTERVAL'}) ? (0 + $ENV{'COLLECTD_INTERVAL'}) : 120;
 $Hostname = defined ($ENV{'COLLECTD_HOSTNAME'}) ? $ENV{'COLLECTD_HOSTNAME'} : 'localhost';
 $| = 1;
-while(42) {
-	#Set this to your qstat path
-	$qstat_exe='/usr/bin/qstat';
 
-	#Edit the following line to add your gameserver
-	query_host("gametype", "ip", "port");
-	sleep(${Interval});
+#Set this to your qstat path
+$qstat_exe='/usr/bin/qstat';
+if (-e $qstat_exe) {
+	while(42) {
+		#Edit the following line to add your gameserver
+		query_host("gametype", "ip", "port");
+		sleep(${Interval});
+	}
+}else{
+	print "Please install qstat or modify the path to the qstat binary.";
 }
-
 #subroutine for gathering player informations
 sub query_host {
 	$gametype=$_[0];
