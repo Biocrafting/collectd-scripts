@@ -11,13 +11,12 @@ my $qstat_exe='/usr/bin/qstat';
 if (-e $qstat_exe) {
 	while(42) {
 		#Edit the following line to add your gameserver
-		query_host("a2s", "84.200.19.40", "27015");
+		query_host("gametype", "IP", "PORT");
 		sleep(${Interval});
 	}
 }else{
 	print "Please install qstat or modify the path to the qstat binary.";
 }
-
 #subroutine for gathering player informations
 sub query_host {
 	my $gametype=$_[0];
