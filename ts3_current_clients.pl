@@ -2,7 +2,7 @@
 use strict;
 use Net::Telnet;
 
-my $Interval = defined ($ENV{'COLLECTD_INTERVAL'}) ? (0 + $ENV{'COLLECTD_INTERVAL'}) : 12;
+my $Interval = defined ($ENV{'COLLECTD_INTERVAL'}) ? (0 + $ENV{'COLLECTD_INTERVAL'}) : 120;
 my $Hostname = defined ($ENV{'COLLECTD_HOSTNAME'}) ? $ENV{'COLLECTD_HOSTNAME'} : 'localhost';
 $| = 1;
 
@@ -23,13 +23,13 @@ sub query_host {
 	my $telnet = new Net::Telnet(Timeout=>5, Errmode=>"return", Prompt=>"/\r/"); 
 	if ($telnet->open(Host=>$hostname, Port=>$port)) { 
   		$telnet->waitfor("/Welcome to the TeamSpeak 3 ServerQuery interface/");
+  		if($username && $password) {
+			$telnet->cmd("login ".$username." ".$password);
+			$telnet->waitfor("/error id=0 msg=ok/");
+   	 	}
   	foreach my $server (@serverids) {
-    		$telnet->cmd("use sid=".$server);
-    		$telnet->waitfor("/error id=0 msg=ok/");
-    		if($username && $password) {
-      			$telnet->cmd("login ".$username." ".$password);
-      			$telnet->waitfor("/error id=0 msg=ok/");
-   	 }
+ 	$telnet->cmd("use sid=".$server);
+    	$telnet->waitfor("/error id=0 msg=ok/");
 	$telnet->cmd("serverinfo");
     	my $clients = 0;
 	my $queryclients = 0;
