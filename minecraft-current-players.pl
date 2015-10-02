@@ -10,7 +10,7 @@ $| = 1;
 
 while(42) {
 	#Edit the following line to add your gameserver
-	ping_server("84.200.19.40", "33996");
+	ping_server("IP", "PORT");
 	sleep(${Interval});
 	}
 
