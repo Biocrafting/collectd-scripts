@@ -5,8 +5,8 @@ use warnings;
 # This script uses smartctl(8) to read HDD temperatures. The drives are
 # attached to a 3ware RAID controller which hddtempd can't handle.
 # Please note that only root can read the SMART attributes from harddrives,
-# The exec plugin will refuse to run scripts as root, which is why `sudo' is used here for
-# fine-grained root privileges for the user `smart'. This isn't as straigt
+# The exec plugin will refuse to run scripts as root, which is why 'sudo' is used here for
+# fine-grained root privileges for the user 'smart'. This isn't as straight
 # forward as one might hope, but we think that the gained security is worth it.
 
 # The sudo configuration looks something like this:
@@ -14,7 +14,6 @@ use warnings;
 # Cmnd_Alias      SMARTCTL = /usr/sbin/smartctl -d 3ware\,0 -A /dev/twl0, /usr/sbin/smartctl -d 3ware\,1 -A /dev/twl0
 # smart   ALL = (root) NOPASSWD: SMARTCTL
 # -- >8 --
-
 
 my $Interval = defined ($ENV{'COLLECTD_INTERVAL'}) ? (0 + $ENV{'COLLECTD_INTERVAL'}) : 120;
 my $Hostname = defined ($ENV{'COLLECTD_HOSTNAME'}) ? $ENV{'COLLECTD_HOSTNAME'} : 'localhost';
@@ -27,10 +26,8 @@ if (-e $smartctl_exe) {
 		#Edit the following line to add your hdds
 		#         No. Controller  No. HDD
 		#smart_temp("twl0",       "0");
+		
 		smart_temp("twl0", "0");
-		smart_temp("twl0", "1");
-		smart_temp("twl0", "2");
-		smart_temp("twl0", "3");
 		sleep(${Interval});
 	}
 }else{
@@ -47,7 +44,7 @@ sub smart_temp {
 	{
 		my $temp = $result[9];
 		my $time = time;
-		print "PUTVAL ${Hostname}/3ware_${controller}/temperature-p${hdd} interval=${Interval} ${time}:${temp}\n";
+		print "PUTVAL ${Hostname}/3ware-${controller}/temperature-p${hdd} interval=${Interval} ${time}:${temp}\n";
 	}
 }
 
